@@ -1,0 +1,55 @@
+{% extends 'notes/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div>
+        {{ form.title.errors }}
+        <label for="{{ form.title.id_for_label }}">Заголовок:</label>
+        {{ form.title }}
+    </div>
+    <br>
+    
+    <div>
+        {{ form.content.errors }}
+        <label for="{{ form.content.id_for_label }}">Содержание:</label>
+        {{ form.content }}
+    </div>
+    <br>
+    
+    <div>
+        {{ form.tags.errors }}
+        <label for="{{ form.tags.id_for_label }}">Теги (через запятую):</label>
+        {{ form.tags }}
+    </div>
+    <br>
+    
+    <div>
+        {{ form.attachments.errors }}
+        <label for="{{ form.attachments.id_for_label }}">Добавить файлы (можно несколько):</label>
+        {{ form.attachments }}
+    </div>
+    
+    {% if note and note.attachments.all %}
+    <div>
+        <h3>Существующие вложения:</h3>
+        {% for att in note.attachments.all %}
+        <div>
+            <input type="checkbox" name="delete_attachments" value="{{ att.id }}" id="del_{{ att.id }}">
+            <label for="del_{{ att.id }}">Удалить {{ att }}</label>
+            <br>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <br>
+    <button type="submit">Сохранить</button>
+    <a href="{% if note %}{% url 'notes:note_detail' note.id %}{% else %}{% url 'notes:note_list' %}{% endif %}" class="button">Отмена</a>
+</form>
+{% endblock %}

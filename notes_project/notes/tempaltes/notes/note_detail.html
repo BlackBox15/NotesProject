@@ -1,0 +1,47 @@
+{% extends 'notes/base.html' %}
+
+{% block title %}{{ note.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ note.title }}</h1>
+<div>
+    {% for tag in note.tags.all %}
+        <span class="tag">{{ tag.name }}</span>
+    {% endfor %}
+</div>
+<p>{{ note.content|linebreaks }}</p>
+<p><small>Создано: {{ note.created_at|date:"d.m.Y H:i" }} | Обновлено: {{ note.updated_at|date:"d.m.Y H:i" }}</small></p>
+
+{% if note.attachments.all %}
+<h3>Вложения:</h3>
+<div class="attachments">
+    {% for att in note.attachments.all %}
+    <div class="attachment">
+        {% with att.get_file_type as file_type %}
+            {% if file_type == 'image' %}
+                <img src="{{ att.file.url }}" alt="{{ att }}" class="attachment-image">
+            {% elif file_type == 'video' %}
+                <video controls>
+                    <source src="{{ att.file.url }}" type="video/mp4">
+                    Ваш браузер не поддерживает видео.
+                </video>
+            {% elif file_type == 'audio' %}
+                <audio controls>
+                    <source src="{{ att.file.url }}" type="audio/mpeg">
+                    Ваш браузер не поддерживает аудио.
+                </audio>
+            {% else %}
+                <a href="{{ att.file.url }}" target="_blank">Скачать {{ att }}</a>
+            {% endif %}
+        {% endwith %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'notes:note_update' note.id %}" class="button">Редактировать</a>
+    <a href="{% url 'notes:note_delete' note.id %}" class="button danger">Удалить</a>
+    <a href="{% url 'notes:note_list' %}" class="button">Назад к списку</a>
+</div>
+{% endblock %}
