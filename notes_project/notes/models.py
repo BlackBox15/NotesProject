@@ -20,7 +20,7 @@ class Note(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('note_detail', args=[str(self.id)])
+        return reverse('notes:note_detail', args=[str(self.id)])
 
 class Attachment(models.Model):
     note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name='attachments', verbose_name='Заметка')

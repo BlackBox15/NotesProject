@@ -5,9 +5,16 @@ class NoteForm(forms.ModelForm):
     class Meta:
         model = Note
         fields = ['title', 'content', 'tags']
+
+        tags = forms.CharField(
+            required=False,
+            widget=forms.TextInput(attrs={'placeholder': 'Введите теги через запятую'})
+        )
+
+
         widgets = {
             'content': forms.Textarea(attrs={'rows': 10}),
-            'tags': forms.TextInput(attrs={'placeholder': 'Введите теги через запятую'}),
+            # 'tags': forms.TextInput(attrs={'placeholder': 'Введите теги через запятую'}),
         }
 
 class MultipleFileInput(forms.ClearableFileInput):
