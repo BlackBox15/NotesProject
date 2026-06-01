@@ -1,4 +1,5 @@
 Проект для ведения заметок на Django.
+
 <img width="1117" height="710" alt="image" src="https://github.com/user-attachments/assets/4a657bec-b4a4-4c2b-a7e4-58be48af7411" />
 
 Заметки - текст с поддержкой вложений.
