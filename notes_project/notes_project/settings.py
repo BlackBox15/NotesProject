@@ -1,11 +1,19 @@
-import os
 from pathlib import Path
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, False),  # По умолчанию False в целях безопасности
+    SECRET_KEY=(str, ""), # По умолчанию пустая строка (Django выдаст ошибку при запуске, если не задать)
+    ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
+)
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-your-secret-key-here'
-DEBUG = True
-ALLOWED_HOSTS = []
+environ.Env.read_env(BASE_DIR / "settings.env")
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG')
+ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -49,10 +57,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'notes_project.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": env.db(
+        "DATABASE_URL",
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = []
