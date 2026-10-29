@@ -2,8 +2,8 @@ from pathlib import Path
 import environ
 
 env = environ.Env(
-    DEBUG=(bool, False),  # По умолчанию False в целях безопасности
-    SECRET_KEY=(str, ""), # По умолчанию пустая строка (Django выдаст ошибку при запуске, если не задать)
+    DEBUG=(bool, False),
+    SECRET_KEY=(str, ""),
     ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
 )
 
